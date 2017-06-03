@@ -516,12 +516,13 @@ namespace mpark {
         }
 
         template <typename... Fs>
-        inline static constexpr lib::
-            array<lib::common_type_t<lib::decay_t<Fs>...>, sizeof...(Fs)>
-            make_farray(Fs &&... fs) {
+        inline static constexpr lib::array<
+            lib::common_type_t<lib::decay_t<Fs>...>,
+            sizeof...(Fs)>
+        make_farray(Fs &&... fs) {
           using result = lib::array<lib::common_type_t<lib::decay_t<Fs>...>,
                                     sizeof...(Fs)>;
-          return visit_visitor_return_type_check<lib::decay_t<Fs>...>(),
+          return // visit_visitor_return_type_check<lib::decay_t<Fs>...>(),
                  result{{lib::forward<Fs>(fs)...}};
         }
 
@@ -1676,9 +1677,11 @@ namespace mpark {
   template <typename Visitor, typename... Vs>
   inline constexpr DECLTYPE_AUTO visit(Visitor &&visitor, Vs &&... vs)
     DECLTYPE_AUTO_RETURN(
+        /*
         (detail::all(!vs.valueless_by_exception()...)
              ? (void)0
              : throw_bad_variant_access()),
+        */
         detail::visitation::variant::visit_value(lib::forward<Visitor>(visitor),
                                                  lib::forward<Vs>(vs)...))
 
